@@ -91,7 +91,7 @@ function App() {
     socket.onopen = () => {
       // Once socket is open send initial ID and pass IP to try to connect to AC
       socket.send(
-        JSON.stringify({ id: generateRandomID(), method: 'connection', ip: location.origin })
+        JSON.stringify({ id: generateRandomID(), method: 'connection', ip: ip })
       )
 
       // Add listeners to newly opened socket
