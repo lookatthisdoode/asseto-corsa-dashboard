@@ -11,5 +11,12 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "ac-remote-telemetry-client": "^0.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "live-server": "^1.2.2",
+    "ws": "^8.16.0"
+  }
 }
