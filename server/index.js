@@ -18,9 +18,10 @@ function connectToAC(ip, id, ws) {
     console.log(`${ws.id} couldn't conect to AC, killing WS`);
     ws.terminate()
   }) 
-  
+
   // Implement desired listeners only when recieved handshake responce (OK)
   ws.ACClient.on('HANDSHAKER_RESPONSE', (data) => {
+    console.log('hanshh');
     data && console.log(`ID ${ws.id} successfully connected to AC UDP`)
     ws.send(JSON.stringify({ method: 'handshake', data: data }))
     // Only when its handshaked, apply another listener
