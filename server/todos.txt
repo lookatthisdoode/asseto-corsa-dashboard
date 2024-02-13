@@ -1,0 +1,8 @@
+Assetto Corsa (Telemetry Data) --> 
+AC Remote Telemetry Client (Node.js Backend) --> 
+WebSocket/Server-Sent Events --> 
+Front-end Web Application (Visualization)
+
+
+
+
