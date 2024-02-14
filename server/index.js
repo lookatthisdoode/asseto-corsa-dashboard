@@ -1,27 +1,32 @@
-const ACRemoteTelemetryClient = require('ac-remote-telemetry-client')
+//const ACRemoteTelemetryClient = require('ac-remote-telemetry-client')
 const express = require('express')
 const { Server } = require('ws')
 const path = require('path');
-const cors = require('cors')
+const cors = require('cors');
+
+// try to make my own lib
+const ACRemoteTelemetryClient = require('./ac/aclib');
+
 const PORT = process.env.PORT || 5000
 
 function connectToAC(ip, id, ws) {
   // Connect to UDP
   ws.ACClient = new ACRemoteTelemetryClient(ip)
+  // Correct ip here
+  // console.log(ws.ACClient);
   ws.ACClient.id = id
 
-  ws.ACClient.client.on('error', (error) => {
-    const errorMsg = `Error trying to connect to AC UDP, most likely, bad IP. ${error}`
-    // Send back message to client
-    ws.send(JSON.stringify({method: 'error', message: errorMsg}))
-    // Destroy WS
-    console.log(`${ws.id} couldn't conect to AC, killing WS`);
-    ws.terminate()
-  }) 
+  // ws.ACClient.client.on('error', (error) => {
+  //   const errorMsg = `Error trying to connect to AC UDP, most likely, bad IP. ${error}`
+  //   // Send back message to client
+  //   ws.send(JSON.stringify({method: 'error', message: errorMsg}))
+  //   // Destroy WS
+  //   console.log(`${ws.id} couldn't conect to AC, killing WS`);
+  //   ws.terminate()
+  // }) 
 
   // Implement desired listeners only when recieved handshake responce (OK)
   ws.ACClient.on('HANDSHAKER_RESPONSE', (data) => {
-    console.log('hanshh');
     data && console.log(`ID ${ws.id} successfully connected to AC UDP`)
     ws.send(JSON.stringify({ method: 'handshake', data: data }))
     // Only when its handshaked, apply another listener
