@@ -1,29 +1,15 @@
-//const ACRemoteTelemetryClient = require('ac-remote-telemetry-client')
 const express = require('express')
 const { Server } = require('ws')
 const path = require('path');
-const cors = require('cors');
+const AssetoCorsaUDPClient = require('./asseto-corsa-udp-client');
 
-// try to make my own lib
-const ACRemoteTelemetryClient = require('./ac/aclib');
 
 const PORT = process.env.PORT || 5000
 
 function connectToAC(ip, id, ws) {
   // Connect to UDP
-  ws.ACClient = new ACRemoteTelemetryClient(ip)
-  // Correct ip here
-  // console.log(ws.ACClient);
+  ws.ACClient = new AssetoCorsaUDPClient(ip)
   ws.ACClient.id = id
-
-  // ws.ACClient.client.on('error', (error) => {
-  //   const errorMsg = `Error trying to connect to AC UDP, most likely, bad IP. ${error}`
-  //   // Send back message to client
-  //   ws.send(JSON.stringify({method: 'error', message: errorMsg}))
-  //   // Destroy WS
-  //   console.log(`${ws.id} couldn't conect to AC, killing WS`);
-  //   ws.terminate()
-  // }) 
 
   // Implement desired listeners only when recieved handshake responce (OK)
   ws.ACClient.on('HANDSHAKER_RESPONSE', (data) => {
@@ -50,7 +36,6 @@ function connectToAC(ip, id, ws) {
 
 const server = express()
   .use(express.static(path.join(__dirname, '../client/dist')))
-  .use(cors())
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const wss = new Server({ server })

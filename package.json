@@ -13,11 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ac-remote-telemetry-client": "^0.1.1",
-    "cors": "^2.8.5",
+    "binary-parser": "^1.6.2",
     "express": "^4.18.2",
-    "live-server": "^1.2.2",
-    "ws": "^8.16.0",
-    "binary-parser": "^1.6.2"
+    "ws": "^8.16.0"
   }
 }

@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 
 const dgram = require('dgram');
 const EventEmitter = require('events');
@@ -30,7 +30,7 @@ const event = {
   RT_LAP: 'RT_LAP'
 };
 
-class ACRemoteTelemetryClient extends EventEmitter {
+class AssetoCorsaUDPClient extends EventEmitter {
   constructor(acServerId) {
     super();
     this.acServerIp = acServerId;
@@ -55,8 +55,6 @@ class ACRemoteTelemetryClient extends EventEmitter {
     });
 
     this.client.bind();
-
-    // console.log(this.client.address().port);
   }
 
   stop() {
@@ -65,12 +63,12 @@ class ACRemoteTelemetryClient extends EventEmitter {
     }
 
     this.client.close(() => {
-      console.log('UDP Client closed 🏁');
+      console.log('UDP Client closed');
       this.client = null;
     });
   }
 
-  sendHandshaker(op, identifier = 1, version = 1) {
+  sendStructuredData(op, identifier = 1, version = 1) {
     const handshaker = {
       identifier,
       version,
@@ -84,33 +82,25 @@ class ACRemoteTelemetryClient extends EventEmitter {
     message.writeInt32LE(handshaker.operationId, 8);
   
     // Send the message to the server
+    // In a way AC wants
     this.client.send(message, 0, message.length, AC_SERVER_PORT, this.acServerIp);
   }
 
-  // sendHandshaker(op, identifier = deviceIdentifier.eIPhoneDevice, version = AC_SERVER_VERSION) {
-  //   const message = Buffer.alloc(12);
-
-  //   message.writeInt32LE(identifier, 0);
-  //   message.writeInt32LE(version, 4);
-  //   message.writeInt32LE(op, 8);
-
-  //   this.client.send(message, 0, message.length, AC_SERVER_PORT, this.acServerIp);
-  // }
 
   handshake() {
-    this.sendHandshaker(operation.HANDSHAKE);
+    this.sendStructuredData(operation.HANDSHAKE);
   }
 
   subscribeUpdate() {
-    this.sendHandshaker(operation.SUBSCRIBE_UPDATE);
+    this.sendStructuredData(operation.SUBSCRIBE_UPDATE);
   }
 
   subscribeSpot() {
-    this.sendHandshaker(operation.SUBSCRIBE_SPOT);
+    this.sendStructuredData(operation.SUBSCRIBE_SPOT);
   }
 
   dismiss() {
-    this.sendHandshaker(operation.DISMISS);
+    this.sendStructuredData(operation.DISMISS);
   }
 
   parseMessage(msg, rinfo) {
@@ -129,4 +119,4 @@ class ACRemoteTelemetryClient extends EventEmitter {
   }
 }
 
-module.exports = ACRemoteTelemetryClient;
+module.exports = AssetoCorsaUDPClient;
